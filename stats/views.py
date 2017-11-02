@@ -76,6 +76,7 @@ def viewstats(request, pk):
 
     # TODO: make automatic detection of timespan instead of hard coding
     predefined_timespan = {
+        "-----": None,
         "Septembre 2016 - Décembre 2016": "01/09/2016-31/12/2016",
         "Janvier 2017 - Juin 2017": "01/01/2017-31/06/2017",
         "Septembre 2017 - Décembre 2017": "01/09/2017-31/12/2017",
@@ -88,9 +89,7 @@ def viewstats(request, pk):
 
     return render(request, "stats/viewstats.haml", {
         "lesson": lesson,
-
         "students": students,
-
         "predefined_timespan": predefined_timespan,
         "list_stats": list_statistics,
 
