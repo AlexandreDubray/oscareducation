@@ -18,7 +18,7 @@
     %li.active
       Statistiques
 
--block content      
+-block content
 
   %div{:id => "wrapper"}
     / Sidebar for customization
@@ -34,14 +34,14 @@
                   %font{:color => "white"} {{stat}}
         %li
           %form{method: "POST", action: "{% url 'stats:exportCSV' lesson.pk %}"}
-          -csrf_token
-            %button.btn.btn-lg.btn-primary{type: "submit"}
-              Données numériques
+            -csrf_token
+              %button.btn.btn-lg.btn-primary{type: "submit"}
+                Données numériques
         %li
           %form{method: "POST", action: "{% url 'stats:exportCSV' lesson.pk %}"}
-          -csrf_token
-            %button.btn.btn-lg.btn-primary{type: "submit"}
-              Exporter en CSV
+            -csrf_token
+              %button.btn.btn-lg.btn-primary{type: "submit"}
+                Exporter en CSV
         %li
           %font{:color => "white", :size => "4"} Période prédéfinie
           %select{:id => "select_timespan"}
@@ -60,11 +60,17 @@
     / Actual content of the page
     %div{:id => "page-content-wrapper"}
       .container-fluid
-        
+
         .col-sm-2
           %a{:href => "#menu-toggle"}
             -csrf_token
             %button.btn.btn-secondary{id: "menu-toggle"} Paramètres
+
+          %form{method: "POST", action: "{% url 'stats:exportCSV' lesson.pk %}"}
+            -csrf_token
+            %button.btn.btn-lg.btn-primary{type: "submit"}
+              Exporter en CSV
+
         .col-md-10
           -#%ul.nav.orange.nav-tabs
           -#  %li.active{role: "presentation"}
@@ -82,14 +88,14 @@
                 Mes étudiants
                 %span.caret
               %ul.dropdown-menu
-                %li
+                -#%li
                   %a{"data-toggle": "tab",href: "#student1"} student 1
-                %li
+                -#%li
                   %a{"data-toggle": "tab",href: "#student2"} student 2
-              -#  -for student in students
-              -#    %li
-              -#      %a{"data-toggle": "tab", href: "#menu2"} {{ student }}
-                
+                -for student in students
+                  %li
+                    %a{"data-toggle": "tab", href: "{% url 'stats:stat_student' lesson.pk student.pk%}"} {{ student }}
+
 
 
           .tab-content
@@ -125,7 +131,7 @@
                   %b
                     HAHA
 
-            -# temporary until I get this sorted 
+            -# temporary until I get this sorted
             #student2.tab-pane.fade
               .ligneorange
 

@@ -10,27 +10,26 @@ from resources.models import KhanAcademy, Sesamath
 from skills.models import Skill
 from users.models import Professor, Student
 from .utils import user_is_superuser
+from stats import StatsObject as stats
 import csv
-
 
 
 @user_is_professor
 def exportCSV(request, pk):
     response = HttpResponse(content_type='text/csv')
-    response['Content-Disposition'] = 'attachment; filename="users.csv"'
+    response['Content-Disposition'] = 'attachment; filename="students.csv"'
 
     lesson = get_object_or_404(Lesson, pk=pk)
     students = Student.objects.filter(lesson=lesson)
-    
+    #stats.ExamsPassed.
     writer = csv.writer(response)
-    writer.writerow(['Username', 'First name', 'Last name', 'Email address'])
+
+    writer.writerow(['Etudiant', 'Classe','Nombre de tests réussi','Dernier test réussi','Nombre d\'authentification sur le site'])
     for student in students:
-        writer.writerow([student])
+        writer.writerow([student, lesson.name])
     # already prints student names, figure what the method is to get the data which is displayed into the CSV
-
-
-
     return response
+
 
 @user_is_superuser
 def dashboard(request):
@@ -58,7 +57,6 @@ def dashboard(request):
         "stages_with_skills_with_questions": questions_per_stage,
         "skills_with_questions": Skill.objects.annotate(Count('exercice')).filter(exercice__count__gt=0),
     })
-
 
 
 def view_student(request, pk):
@@ -91,7 +89,7 @@ def viewstats(request, pk):
     return render(request, "stats/viewstats.haml", {
         "lesson": lesson,
 
-        "students": students
+        "students": students,
 
         "predefined_timespan": predefined_timespan,
         "list_stats": list_statistics,
@@ -108,6 +106,7 @@ def stat_student(request, pk_lesson, pk_student):
         "student": student
     })
 
+
 def stat_student_tab(request, pk_lesson, pk_student):
     lesson = get_object_or_404(Lesson, pk=pk_lesson)
     student = get_object_or_404(Student, pk=pk_student)
@@ -116,4 +115,3 @@ def stat_student_tab(request, pk_lesson, pk_student):
         "lesson": lesson,
         "student": student
     })
-
